@@ -1,0 +1,479 @@
+<div class="d-flex">
+    <nav class="bg-light" id="sidebar">
+
+        <ul class="list-unstyled components">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" (click)="new_template()" class="btn btn-md btn-info shadow-none"
+                        style="color: white;">
+                        <i class="fas fa-plus" style="color: white;"></i>
+                        &nbsp;Create New Template
+                    </button>
+                </div>
+            </div>
+
+            <hr>
+            <div id="cardSection" class=" mb-5" #cardSection>
+                @for(c_item of card_template_data; track c_item.id) {
+                <div class="card mb-3" [id]="'card-' + c_item.id">
+
+                    <div class="card-header">{{c_item.templatename}}</div>
+
+                    <div class="card-body">
+
+                        <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                                the card's content.</p> -->
+                        <img src="{{c_item.img}}">
+
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <i class="fas fa-regular fa-flag col-md-2" title="Flag as Important"></i>
+                                <i class="fas fa-download col-md-2" title="Flag as Important"></i>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <i *ngFor="let star of [1, 2, 3, 4, 5]" class="fa-star"
+                                    [ngClass]="{'fas': c_item.rating >= star, 'far': c_item.rating < star}"
+                                    (click)="setRating(c_item.id, star)">
+                                </i>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                }
+
+            </div>
+
+        </ul>
+
+    </nav>
+
+    <div class="container-fluid mt-3" id="mainContent" style="padding-top: 56px;">
+        <div id="card_popover"></div>
+
+        <div class="row" style="margin-top: 4rem;">
+            <div>
+                <!-- @if(!new_template_element) { -->
+                <div id="card1" #card1 class="business-card" [style.backgroundImage]="backgroundImage">
+                    <div id="contactInfo">
+                        <!-- Business card content goes here -->
+                        <img id="profileImg" src="https://picsum.photos/200/300" alt="Profile Image"
+                            class="draggable profile-img editable">
+                        <p class="draggable editable "> LTI mindtree and Qentelli </p>
+                        <p class="draggable editable">SaiMadhanMohan&#64;LtiMindtree.com</p>
+                    </div>
+                </div>
+                <!-- } @else { -->
+                <!-- <div id="card1" #card1 class="business-card" [style.backgroundImage]="backgroundImage">
+                        <div id="contactInfo">
+                          
+                        </div>
+                    </div>
+                } -->
+
+
+                <div id="contextMenu" #contextMenu class="context-menu">
+
+                    <div class="row ">
+                        <div class="col-md-2">
+                            <label class="btn btn-sm btn-secondary" (click)="removeElement()"><i
+                                    class="fas fa-trash"></i></label>
+                        </div>
+                        <div class="col-md-7">
+                            <!-- app.component.html -->
+                            <select id="fontFamily" class="form-control shadow-none custom-select">
+                                <option value="Arial">Arial</option>
+                                <option value="Helvetica">Helvetica</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" id="fontSize" min="8" max="72" value="16">
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <input type="color" class="form-control shadow-none" id="textColor">
+                        </div>
+
+                        <div class="col-md-8">
+                            <button class="btn btn-sm btn-secondary m-2" (click)="toggleBold()">B</button>
+                            <button class="btn btn-sm btn-secondary m-2" (click)="toggleItalic()">I</button>
+                            <button class="btn btn-sm btn-secondary m-2" (click)="toggleUnderline()">U</button>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-md-6">
+                            <button class="btn btn-sm btn-primary" (click)="applyFont()">Apply Font</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="resizeMenu" #resizeMenu class="resize-menu context-menu">
+                    <input type="number" id="cardWidth" placeholder="Width">
+                    <input type="number" id="cardHeight" placeholder="Height">
+                    <button (click)="resizeCard()">Resize Card</button>
+                </div>
+
+
+            </div>
+
+            <div id="qrCodeModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="qrCodeContainer"></div>
+                </div>
+            </div>
+            <div id="rightSidebar" #rightSidebar class="bg-light">
+
+                <div class="formSection" style="margin-bottom: 8rem;">
+
+                    <div class="row mt-1 align-items-center">
+                        <div class="col-md-12 d-flex">
+
+                            <input type="text" id="inputText" class="form-control shadow-none" placeholder="Enter text">
+                            <button class="social-icon mr-2" id="addTextButton" data-toggle="tooltip"
+                                data-placement="top" title="Add Text">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row  social-icons">
+                        <div class="mt-1">
+                            <button type="button" class="btn btn-sm social-icon" id="addFacebook">
+                                <i class="fab fa-facebook"></i>
+                            </button>
+                            <button class="btn btn-sm social-icon" id="addTwitter" type="button">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="btn btn-sm social-icon" id="addLinkedIn" type="button">
+                                <i class="fab fa-linkedin"></i>
+                            </button>
+                            <button class="btn btn-sm social-icon" id="addInstagram" type="button">
+                                <i class="fab fa-instagram"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <nav class="popover_setup" style="margin-left: 0.5rem;">
+                                <ul class="navbar-nav ml-auto">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-images"></i>Image Elements
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
+                                      padding-right: 1rem;
+                                      padding-left: 1rem;">
+                                            <div class="font-shapes" style="width: fit-content;">
+                                                <div class="row">
+                                                    <div class="col-2 text-center">
+                                                        <button class="popover-btn">
+                                                            <i style="font-size: 1.5rem;"
+                                                                class="fas fa-image"></i></button>
+
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <button class="popover-btn"><img style="width: 1.5rem;"
+                                                                src="assets/icons/round.png"></button>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <button class="popover-btn"><img style="width: 1.5rem;"
+                                                                src="assets/icons/image.png"></button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <select id="themeSelector" class="form-control shadow-none">
+                                <option value="">Select Theme</option>
+                                <option value="theme-default">Default</option>
+                                <option value="theme-dark">Dark</option>
+                                <option value="theme-corporate">Corporate</option>
+                                <option value="theme-modern">Modern</option>
+                                <option value="theme-gradient-1">Gradient 1</option>
+                                <option value="theme-gradient-2">Gradient 2</option>
+                                <option value="theme-gradient-3">Gradient 3</option>
+                                <option value="theme-rich-blue">Rich Blue</option>
+                                <option value="theme-rich-purple">Rich Purple</option>
+                                <option value="theme-rich-green">Rich Green</option>
+                                <option value="theme-multishade-orange">Multishade Orange</option>
+                                <option value="theme-multishade-pink">Multishade Pink</option>
+                                <option value="theme-multishade-aqua">Multishade Aqua</option>
+
+                                <!-- Add more theme options here -->
+                            </select>
+
+                        </div>
+
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label>Bgm</label>
+                            <input type="file" class="form-control shadow-none" (change)="onFileChange($event)" />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-sm " id="addHorizontalLine" data-toggle="tooltip"
+                                data-placement="top" title="Insert Horizontal Line">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button class="btn btn-sm " id="addVerticalLine" data-toggle="tooltip" data-placement="top"
+                                title="Insert Vertical Line">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row mt-2">
+                                <div class=" col-md-6">
+                                    <div class="form-group">
+                                        <label for="customBgColor">Bg</label>
+                                        <input type="color" class="form-control" id="customBgColor"
+                                            placeholder="Background Color">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="customBgColor">Text</label>
+                                        <input type="color" class="form-control" id="customTextColor"
+                                            placeholder="Text Color">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-3">
+                                <div class="col-md-2">
+                                    <button class="btn btn-sm btn-primary" id="applyCustomTheme" data-toggle="tooltip"
+                                        data-placement="top" title="Apply Custom Theme">
+                                        <i class="fas fa-paint-brush"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <button class="btn btn-sm btn-secondary" id="downloadBtn" data-toggle="tooltip"
+                                        data-placement="top" title="Download Card">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-sm btn-info" id="generateQRCodeBtn" data-toggle="tooltip"
+                                        data-placement="top" title="Generate QR Code">
+                                        <i class="fas fa-qrcode"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-sm btn-danger" id="resetBtn" data-toggle="tooltip"
+                                        data-placement="top" title="Reset">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary btn-sm">Save Template Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="popover" class="popover_card" style="border-radius: 2rem;" *ngIf="isPopoverVisible" [ngStyle]="popoverStyles"
+    class="context-menu">
+    <div class="row d-flex justify-content-start align-items-center">
+        <div class="col-md-12 d-flex align-items-center popover_layout">
+            <select (change)="changeFontFamily($event)" class="form-control shadow-none">
+                <option *ngFor="let font of fonts" [value]="font">{{font}}</option>
+            </select>
+
+            <input type="number" class="form-control shadow-none" id="fontSize" min="8" max="72" value="16"
+                style="width: 4rem;">
+            <button class="popover-btn"><i class="fas fa-clone"></i></button>
+            <button class="popover-btn" (click)="removeElement()"><i class="fas fa-trash"></i></button>
+            <button class="popover-btn" (click)="toggleItalic()"><i class="fas fa-italic"></i></button>
+            <button class="popover-btn" (click)="toggleBold()"><i class="fas fa-bold"></i></button>
+            <button class="popover-btn" (click)="toggleUnderline()"><i class="fas fa-underline"></i></button>
+         
+
+            <input type="color" class="form-control shadow-none" id="textColor">
+            <nav class="popover_setup" style="margin-left: 0.5rem;">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-clone"></i>Layer
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
+                      padding-right: 1rem;
+                      padding-left: 1rem;
+                      overflow-y: scroll;
+                      height: 20rem;margin-left: -12rem;">
+                            <div class="font-shapes" style="width: fit-content;">
+                                <label>Layer</label>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4 text-center">
+                                        <button class="popover-btn" (click)="bringToFront()"
+                                            title="Insert Horizontal Line"><i class="fas fa-copy"></i>Forward</button>
+
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <button class="popover-btn" (click)="sendToBack()"
+                                            title="Insert Vertical Line"><i
+                                                class="fas fa-ellipsis-v"></i>Backword</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <nav class="popover_setup">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <svg class="drag-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5.55 3.051a2.694 2.694 0 0 0-2.351 4.012c.593 1.222 1.572 2.178 2.365 2.815a11.86 11.86 0 0 0 1.37.947 6 6 0 0 0 .092.053l.027.015.008.004.003.002h.002a.749.749 0 0 0 .71 0h.001l.003-.002.008-.004.026-.015a9.301 9.301 0 0 0 .408-.246c.264-.168.625-.414 1.023-.732.777-.622 1.738-1.553 2.34-2.743a2.694 2.694 0 0 0-4.166-3.35 2.684 2.684 0 0 0-1.87-.756ZM15.922 3.58a1.027 1.027 0 0 1 1.776 0l3.307 5.694a1.026 1.026 0 0 1-.888 1.542h-6.614a1.026 1.026 0 0 1-.887-1.542l3.306-5.694ZM16.81 20.949a4.213 4.213 0 1 0 0-8.425 4.213 4.213 0 0 0 0 8.425ZM3.568 13.654a.77.77 0 0 1 .77-.77h6.14a.77.77 0 0 1 .77.77v6.294c0 .34-.276.616-.616.616H4.338a.77.77 0 0 1-.77-.77v-6.14Z"
+                                    fill="currentColor"></path>
+                            </svg>Elements
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
+                      padding-right: 1rem;
+                      padding-left: 1rem;
+                      overflow-y: scroll;
+                      height: 20rem;margin-left: -15rem;">
+                            <div class="font-shapes" style="width: fit-content;">
+                                <label>shapes</label>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-circle"></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-square "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-play "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-star "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-heart "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-dice-d6 "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-dice-d20 "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-gem "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-arrow-right "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-check "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-times "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-plus "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-minus "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-exclamation "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-question "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-circle-notch "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-square-full "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn far fa-circle "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn far fa-square "></i>
+                                    </div>
+                                    <div class="col-2 text-center ">
+                                        <i class="popover-btn fas fa-star-half-alt "></i>
+                                    </div>
+                                </div>
+                                <label>alignment</label>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-2 text-center">
+                                        <button class="popover-btn"><i class="fas fa-list-ul"></i></button>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <button class="popover-btn"><i class="fas fa-list-ol"></i></button>
+                                    </div>
+                                </div>
+                                <label>lines</label>
+                                <div class="row">
+                                    <div class="col-2 text-center">
+                                        <button class="popover-btn" data-toggle="tooltip" data-placement="top"
+                                            title="Insert Horizontal Line"><i class="fas fa-minus"></i></button>
+
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <button class="popover-btn" data-toggle="tooltip" data-placement="top"
+                                            title="Insert Vertical Line"><i class="fas fa-ellipsis-v"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+</div>

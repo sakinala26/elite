@@ -1,0 +1,27 @@
+<!-- app.component.html -->
+<nav class="navbar navbar-expand-lg fixed-top" style="padding: 0.5rem;background-color: #dd0909 !important;">
+    <a class="navbar-brand" href="#" id="toggleSidebar">Elite</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav" style="display: flex;justify-content: flex-end;">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"> <a class="nav-link"><i class="fas fa-bell"></i> Notifications</a> </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i> Profile
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline ml-3 search-box"> 
+        <i class="fas fa-search"></i> 
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> 
+      </form>
+    </div>
+  </nav>
+  

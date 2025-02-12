@@ -1,0 +1,709 @@
+
+#container {
+    width: 50%;
+    border: 2px solid #ccc;
+    position: relative;
+    overflow: hidden;
+}
+.business-card {
+     width: 350px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: auto;
+    background-size: cover;
+  background-position: center;
+}
+.draggable {
+    cursor: grab;
+    user-select: none;
+    position: absolute;
+}
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+.name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+.title {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 15px;
+    word-wrap: break-word;
+}
+.contact-info {
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+.contact-info i {
+    color: #007bff;
+    margin-right: 10px;
+}
+.social-icons {
+    margin-top: 15px;
+}
+.social-icons .btn {
+    margin-right: 5px;
+}
+
+.theme-default {
+background-color: white;
+color: black;
+}
+.theme-dark {
+background-color: #333;
+color: white;
+}
+.theme-corporate {
+background-color: #f4f4f4;
+color: #333;
+}
+.theme-modern {
+background-color: #e0f7fa;
+color: #00796b;
+}
+.theme-gradient-1 {
+background: linear-gradient(to right, #ff7e5f, #feb47b);
+color: white;
+}
+.theme-gradient-2 {
+background: linear-gradient(to right, #6a11cb, #2575fc);
+color: white;
+}
+.theme-gradient-3 {
+background: linear-gradient(to right, #43cea2, #185a9d);
+color: white;
+}
+
+.font-icon {
+position: absolute;
+top: -10px;
+right: -10px;
+cursor: pointer;
+display: none;
+}
+.editable:hover .font-icon {
+display: block;
+}
+
+.context-menu {
+display: none;
+position: absolute;
+background: #fff;
+border: 1px solid #ddd;
+box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+z-index: 1000;
+border-radius: 8px;
+width: 300px; /* Adjust width as needed */
+padding: 1rem;
+}
+.context-menu label {
+font-weight: bold;
+margin-top: 5px;
+}
+.context-menu button {
+margin-top: 5px;
+}
+.context-menu input[type="color"] {
+width: 100%;
+height: 30px;
+border: none;
+margin-top: 5px;
+}
+.resizable {
+position: relative;
+border: 1px solid #ccc;
+}
+
+.resizable::after {
+content: '';
+width: 10px;
+height: 10px;
+position: absolute;
+right: 0;
+bottom: 0;
+background: #ccc;
+cursor: se-resize;
+}
+
+/* Define rich color themes */
+.theme-rich-blue {
+background: linear-gradient(135deg, #0079f3, #00c6ff);
+color: #ffffff;
+}
+
+.theme-rich-purple {
+background: linear-gradient(135deg, #6A11CB, #2575FC);
+color: #ffffff;
+}
+
+.theme-rich-green {
+background: linear-gradient(135deg, #56ab2f, #a8e063);
+color: #ffffff;
+}
+
+/* Multi-shaded colors */
+.theme-multishade-orange {
+background: linear-gradient(135deg, #ff8008, #ffc837);
+color: #ffffff;
+}
+
+.theme-multishade-pink {
+background: linear-gradient(135deg, #ff6a00, #ee0979);
+color: #ffffff;
+}
+
+.theme-multishade-aqua {
+background: linear-gradient(135deg, #3a7bd5, #3a6073);
+color: #ffffff;
+}
+/* Styles for horizontal and vertical lines */
+.line-horizontal, .line-vertical {
+position: absolute;
+background-color: black; /* Add a default color */
+cursor: move; /* Change cursor to indicate draggable */
+z-index: 10;
+}
+
+.line-horizontal {
+height: 2px; /* Default height for horizontal lines */
+width: 100%; /* Default width */
+}
+
+.line-vertical {
+width: 0.125em; /* Default width for vertical lines */
+height: 100%; /* Default height */
+}
+#card1 {
+width: 508px;
+height: 232px;
+overflow: scroll; /* Ensures scroll behavior remains active */
+}
+
+#card1::-webkit-scrollbar {
+display: none; /* For Chrome, Safari, and Opera */
+}
+
+#card1 {
+-ms-overflow-style: none; /* For Internet Explorer and Edge */
+scrollbar-width: none; /* For Firefox */
+}
+
+
+  /* Custom CSS for Navbar */
+  .navbar {
+    background-color: #1B1B1B;
+    /* Dark Navy Blue */
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: #fff;
+    /* White text */
+}
+
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+    color: #ddd;
+    /* Slightly lighter shade on hover */
+}
+
+/* Custom CSS for Sidebar */
+
+#sidebar {
+
+    width: 250px;
+
+    position: fixed;
+
+    top: 56px;
+    /* Adjust based on navbar height */
+
+    left: 0;
+
+    height: 100%;
+
+    background: #f8f9fa;
+
+    padding: 15px;
+
+    border-right: 1px solid #dee2e6;
+
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+
+    transition: left 0.3s ease;
+
+}
+
+#sidebar .components {
+
+    padding: 0;
+
+}
+
+#sidebar .components li {
+
+    margin-bottom: 10px;
+
+}
+
+#sidebar .components a {
+
+    color: #333;
+
+    text-decoration: none;
+
+}
+
+#mainContent {
+
+    margin-left: 250px;
+    /* Adjust based on sidebar width */
+
+    transition: margin-left 0.3s ease;
+
+}
+
+.collapsed-sidebar #sidebar {
+
+    left: -250px;
+
+}
+
+.collapsed-sidebar #mainContent {
+
+    margin-left: 0;
+
+}
+
+/* Stylish Scrollbar */
+
+#sidebar::-webkit-scrollbar {
+
+    width: 8px;
+
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+
+    background: #888;
+
+    border-radius: 4px;
+
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+
+    background: #555;
+
+}
+
+/* Ensure cards take up full height and scroll */
+
+#cardSection {
+
+    height: calc(100% - 60px);
+    /* Adjust based on padding and other elements */
+
+}
+
+#formSection {
+
+    border: 1px solid #dee2e6;
+
+    padding: 15px;
+
+    background-color: #f8f9fa;
+
+    font-family: Arial, sans-serif;
+    /* Adjust the font family as needed */
+
+}
+
+
+
+/* Icon for collapsed sidebar */
+
+.collapsed-sidebar-icon {
+
+    position: fixed;
+
+    top: 56px;
+
+    left: 0;
+
+    font-size: 24px;
+
+    background: #f8f9fa;
+
+    padding: 10px;
+
+    border: 1px solid #dee2e6;
+
+    cursor: pointer;
+
+}
+
+/* Highlight selected card */
+
+
+
+#rightSidebar {
+
+    position: fixed;
+
+    top: 56px;
+    /* Adjust based on navbar height */
+
+    right: 0;
+
+    width: 300px;
+
+    height: 100%;
+
+    background: #f8f9fa;
+
+    border-left: 1px solid #dee2e6;
+
+    overflow-y: auto;
+
+    transition: right 0.3s ease;
+
+    display: none;
+    /* Hide initially */
+
+}
+
+
+
+.formSection {
+
+    padding: 15px;
+
+    font-family: Arial, sans-serif;
+    /* Adjust the font family as needed */
+
+}
+
+
+
+.input-group-text {
+
+    background-color: rgba(0, 0, 0, .03);
+
+    color: white;
+
+}
+
+.highlight-card {
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow effect */
+
+    transition: box-shadow 0.3s ease;
+
+    background-color: #f1f1f1;
+    /* Slightly lighter background color */
+
+}
+
+.social-icons {
+
+    display: flex;
+
+    justify-content: space-around;
+
+    
+
+}
+
+
+
+.social-icon {
+
+    display: inline-block;
+
+    width: 40px;
+
+    height: 40px;
+
+    border: 2px solid #ccc;
+
+    border-radius: 50%;
+
+    text-align: center;
+
+    line-height: 18px;
+    /* Align icon vertically */
+
+    font-size: 20px;
+
+    color: #333;
+
+    transition: all 0.3s ease;
+
+}
+
+
+
+.social-icon:hover {
+
+    border-color: #007bff;
+
+    color: #007bff;
+
+}
+
+
+
+.social-icon i {
+
+    line-height: inherit;
+
+}
+
+
+
+
+
+
+
+.input-group-text {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Navbar icons */
+.navbar-nav .nav-item i {
+    margin-right: 5px;
+}
+
+/* Stylish search box */
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    border-radius: 50px;
+    padding-left: 2.5rem;
+    border: 1px solid #ced4da;
+}
+
+.search-box .fa-search {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    color: #495057;
+}
+
+.card-body {
+    padding: 0.5rem;
+}
+.card-body img {
+    height: 7rem;
+}
+
+// card left section footer scss
+.flag-icon {
+    font-size: 24px;
+    color: gray;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  .flag-icon.flagged {
+    color: yellow;
+  }
+  
+ 
+  
+  .flag-icon {
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .flag-icon.text-warning {
+    color: yellow;
+  }
+  
+  .stars i {
+    font-size: 20px;
+    color: gray;
+    cursor: pointer;
+  }
+  
+  .stars i.fas {
+    color: yellow;
+  }
+  
+  .ml-3 {
+    margin-left: 1rem;
+  }
+/* highlighting the selected elements css here*/
+  .highlight-border {
+    border: 2px dashed #ff9800;
+    width: fit-content;
+  }
+
+
+  /* Dropdown styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .dropdown-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    left: 0; /* Align to the left side */
+  }
+  
+  .dropdown-content li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .dropdown-content li:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .shape {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+  }
+  #popover.context-menu {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+  }
+  
+  #popover.context-menu select {
+    margin-top: 5px;
+  }
+  
+  .highlight-border {
+    border: 2px dashed #c1f419;
+    
+  }
+.popover_card a {
+    cursor: pointer;
+}  
+  
+
+  
+  .popover_layout input[type="color"] {
+    width: revert;
+    height: 30px;
+    border: none;
+    margin-top: 5px;
+    }
+
+   
+
+
+      .popover_layout {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px; /* Adjust the gap size as needed */
+    }
+    
+    .popover-btn {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 5px;
+        margin-left: 10px;
+        transition: background-color 0.3s;
+    }
+    
+    .popover-btn:hover {
+        background-color: #a2c5ec; /* Change the background color on hover */
+        border-radius: 4px; /* Rounded corners for a trendy look */
+    }
+
+    /* app.component.css */
+.popover_setup .dropdown-menu {
+    display: none; /* Bootstrap will handle this */
+  }
+  
+  .popover_setup .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-item i {
+    margin-right: 5px;
+  }
+
+  .popover_setup .dropdown-menu {
+    position: absolute;
+}
+.font-shapes .fas{
+    cursor: pointer;
+}
+.dropdown-toggle::after {
+    display: none; /* Hides the dropdown caret */
+  }
+
+  #contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }

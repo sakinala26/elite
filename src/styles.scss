@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+/* Custom scrollbar for WebKit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 20px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #9c9a9e, #2575fc);
+    border-radius: 20px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #9c9a9e, #9c9a9e);
+  }
+  
+  ::-webkit-scrollbar-corner {
+    background: #f1f1f1;
+  }
+  
+  /* Custom scrollbar for Mozilla Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #9c9a9e #f1f1f1;
+  }
+  
+  /* Custom scrollbar for Internet Explorer and Microsoft Edge */
+  @supports (-ms-overflow-style: none) {
+    * {
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+  }
+  
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #9c9a9e #f1f1f1;
+  }
+  

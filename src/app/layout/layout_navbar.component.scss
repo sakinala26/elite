@@ -1,0 +1,336 @@
+  /* Custom CSS for Navbar */
+  .navbar {
+      background-color: #1B1B1B;
+      /* Dark Navy Blue */
+  }
+
+  .navbar .nav-link,
+  .navbar .navbar-brand {
+      color: #fff;
+      /* White text */
+  }
+
+  .navbar .nav-link:hover,
+  .navbar .navbar-brand:hover {
+      color: #ddd;
+      /* Slightly lighter shade on hover */
+  }
+
+  /* Custom CSS for Sidebar */
+
+  #sidebar {
+
+      width: 250px;
+
+      position: fixed;
+
+      top: 56px;
+      /* Adjust based on navbar height */
+
+      left: 0;
+
+      height: 100%;
+
+      background: #f8f9fa;
+
+      padding: 15px;
+
+      border-right: 1px solid #dee2e6;
+
+      overflow-y: auto;
+      /* Enable vertical scrolling */
+
+      transition: left 0.3s ease;
+
+  }
+
+  #sidebar .components {
+
+      padding: 0;
+
+  }
+
+  #sidebar .components li {
+
+      margin-bottom: 10px;
+
+  }
+
+  #sidebar .components a {
+
+      color: #333;
+
+      text-decoration: none;
+
+  }
+
+  #mainContent {
+
+      margin-left: 250px;
+      /* Adjust based on sidebar width */
+
+      transition: margin-left 0.3s ease;
+
+  }
+
+  .collapsed-sidebar #sidebar {
+
+      left: -250px;
+
+  }
+
+  .collapsed-sidebar #mainContent {
+
+      margin-left: 0;
+
+  }
+
+  /* Stylish Scrollbar */
+
+  #sidebar::-webkit-scrollbar {
+
+      width: 8px;
+
+  }
+
+  #sidebar::-webkit-scrollbar-thumb {
+
+      background: #888;
+
+      border-radius: 4px;
+
+  }
+
+  #sidebar::-webkit-scrollbar-thumb:hover {
+
+      background: #555;
+
+  }
+
+  /* Ensure cards take up full height and scroll */
+
+  #cardSection {
+
+      height: calc(100% - 60px);
+      /* Adjust based on padding and other elements */
+
+  }
+
+  #formSection {
+
+      border: 1px solid #dee2e6;
+
+      padding: 15px;
+
+      background-color: #f8f9fa;
+
+      font-family: Arial, sans-serif;
+      /* Adjust the font family as needed */
+
+  }
+
+
+
+  /* Icon for collapsed sidebar */
+
+  .collapsed-sidebar-icon {
+
+      position: fixed;
+
+      top: 56px;
+
+      left: 0;
+
+      font-size: 24px;
+
+      background: #f8f9fa;
+
+      padding: 10px;
+
+      border: 1px solid #dee2e6;
+
+      cursor: pointer;
+
+  }
+
+  /* Highlight selected card */
+
+
+
+  #rightSidebar {
+
+      position: fixed;
+
+      top: 56px;
+      /* Adjust based on navbar height */
+
+      right: 0;
+
+      width: 300px;
+
+      height: 100%;
+
+      background: #f8f9fa;
+
+      border-left: 1px solid #dee2e6;
+
+      overflow-y: auto;
+
+      transition: right 0.3s ease;
+
+      display: none;
+      /* Hide initially */
+
+  }
+
+
+
+  .formSection {
+
+      padding: 15px;
+
+      font-family: Arial, sans-serif;
+      /* Adjust the font family as needed */
+
+  }
+
+
+
+  .input-group-text {
+
+      background-color: rgba(0, 0, 0, .03);
+
+      color: white;
+
+  }
+
+  .highlight-card {
+
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Subtle shadow effect */
+
+      transition: box-shadow 0.3s ease;
+
+      background-color: #f1f1f1;
+      /* Slightly lighter background color */
+
+  }
+
+  .social-icons {
+
+      display: flex;
+
+      justify-content: space-around;
+
+      padding: 10px;
+
+  }
+
+
+
+  .social-icon {
+
+      display: inline-block;
+
+      width: 40px;
+
+      height: 40px;
+
+      border: 2px solid #ccc;
+
+      border-radius: 50%;
+
+      text-align: center;
+
+      line-height: 40px;
+      /* Align icon vertically */
+
+      font-size: 20px;
+
+      color: #333;
+
+      transition: all 0.3s ease;
+
+  }
+
+
+
+  .social-icon:hover {
+
+      border-color: #007bff;
+
+      color: #007bff;
+
+  }
+
+
+
+  .social-icon i {
+
+      line-height: inherit;
+
+  }
+
+
+
+
+
+
+
+  .input-group-text {
+      background-color: #007bff;
+      color: white;
+  }
+
+  .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+  }
+
+  .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+  }
+
+  .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+  }
+
+  /* Navbar icons */
+  .navbar-nav .nav-item i {
+      margin-right: 5px;
+  }
+
+  /* Stylish search box */
+  .search-box {
+      position: relative;
+  }
+
+  .search-box input {
+      border-radius: 50px;
+      padding-left: 2.5rem;
+      border: 1px solid #ced4da;
+  }
+
+  .search-box .fa-search {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      color: #495057;
+  }
+
+  /* app.component.css */
+.navbar .dropdown-menu {
+    display: none; /* Bootstrap will handle this */
+  }
+  
+  .navbar .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-item i {
+    margin-right: 5px;
+  }
+  
