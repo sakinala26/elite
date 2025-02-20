@@ -29,10 +29,12 @@ export class BusinessCardService {
 
   bringToFront(element: HTMLElement) {
     const highestZIndex = this.getHighestZIndex();
+    debugger;
     element.style.zIndex = (highestZIndex + 1).toString();
   }
 
   sendToBack(element: HTMLElement) {
+    debugger;
     element.style.zIndex = this.minZIndex.toString();
   }
 
