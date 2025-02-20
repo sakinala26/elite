@@ -57,18 +57,202 @@
     </nav>
 
     <div class="container-fluid mt-3" id="mainContent" style="padding-top: 56px;">
-        <div id="card_popover"></div>
+        <div id="popover" class="popover_card" style="border-radius: 2rem;" *ngIf="isPopoverVisible"
+            [ngStyle]="popoverStyles" class="context-menu">
+            <div class="row d-flex justify-content-start align-items-center">
+                <div class="col-md-12 d-flex align-items-center popover_layout">
+                    <select (change)="changeFontFamily($event)" class="form-control shadow-none">
+                        <option *ngFor="let font of fonts" [value]="font">{{font}}</option>
+                    </select>
 
-        <div class="row" style="margin-top: 4rem;">
+                    <input type="number" class="form-control shadow-none" id="fontSize" min="8" max="72" value="16"
+                        style="width: 4rem;">
+                    <button class="popover-btn"><i class="fas fa-clone"></i></button>
+                    <button class="popover-btn" (click)="removeElement()"><i class="fas fa-trash"></i></button>
+                    <button class="popover-btn" (click)="toggleItalic()"><i class="fas fa-italic"></i></button>
+                    <button class="popover-btn" (click)="toggleBold()"><i class="fas fa-bold"></i></button>
+                    <button class="popover-btn" (click)="toggleUnderline()"><i class="fas fa-underline"></i></button>
+
+
+                    <input type="color" class="form-control shadow-none" id="textColor">
+                    <nav class="popover_setup" style="margin-left: 0.5rem;">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-clone"></i>Layer
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
+                          padding-right: 1rem;
+                          padding-left: 1rem;
+                          overflow-y: scroll;
+                          height: 20rem;margin-left: -12rem;">
+                                    <div class="font-shapes" style="width: fit-content;">
+                                        <label>Layer</label>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-4 text-center">
+                                                <button class="popover-btn" (click)="bringToFront()"
+                                                    title="Insert Horizontal Line"><i
+                                                        class="fas fa-copy"></i>Forward</button>
+
+                                            </div>
+                                            <div class="col-4 text-center">
+                                                <button class="popover-btn" (click)="sendToBack()"
+                                                    title="Insert Vertical Line"><i
+                                                        class="fas fa-ellipsis-v"></i>Backword</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <nav class="popover_setup">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <svg class="drag-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5.55 3.051a2.694 2.694 0 0 0-2.351 4.012c.593 1.222 1.572 2.178 2.365 2.815a11.86 11.86 0 0 0 1.37.947 6 6 0 0 0 .092.053l.027.015.008.004.003.002h.002a.749.749 0 0 0 .71 0h.001l.003-.002.008-.004.026-.015a9.301 9.301 0 0 0 .408-.246c.264-.168.625-.414 1.023-.732.777-.622 1.738-1.553 2.34-2.743a2.694 2.694 0 0 0-4.166-3.35 2.684 2.684 0 0 0-1.87-.756ZM15.922 3.58a1.027 1.027 0 0 1 1.776 0l3.307 5.694a1.026 1.026 0 0 1-.888 1.542h-6.614a1.026 1.026 0 0 1-.887-1.542l3.306-5.694ZM16.81 20.949a4.213 4.213 0 1 0 0-8.425 4.213 4.213 0 0 0 0 8.425ZM3.568 13.654a.77.77 0 0 1 .77-.77h6.14a.77.77 0 0 1 .77.77v6.294c0 .34-.276.616-.616.616H4.338a.77.77 0 0 1-.77-.77v-6.14Z"
+                                            fill="currentColor"></path>
+                                    </svg>Elements
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
+                          padding-right: 1rem;
+                          padding-left: 1rem;
+                          overflow-y: scroll;
+                          height: 20rem;margin-left: -15rem;">
+                                    <div class="font-shapes" style="width: fit-content;">
+                                        <label>shapes</label>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-circle"></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-square "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-play "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-star "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-heart "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-dice-d6 "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-dice-d20 "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-gem "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-arrow-right "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-check "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-times "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-plus "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-minus "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-exclamation "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-question "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-circle-notch "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-square-full "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn far fa-circle "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn far fa-square "></i>
+                                            </div>
+                                            <div class="col-2 text-center ">
+                                                <i class="popover-btn fas fa-star-half-alt "></i>
+                                            </div>
+                                        </div>
+                                        <label>alignment</label>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-2 text-center">
+                                                <button class="popover-btn"><i class="fas fa-list-ul"></i></button>
+                                            </div>
+                                            <div class="col-2 text-center">
+                                                <button class="popover-btn"><i class="fas fa-list-ol"></i></button>
+                                            </div>
+                                        </div>
+                                        <label>lines</label>
+                                        <div class="row">
+                                            <div class="col-2 text-center">
+                                                <button class="popover-btn" data-toggle="tooltip" data-placement="top"
+                                                    title="Insert Horizontal Line"><i class="fas fa-minus"></i></button>
+
+                                            </div>
+                                            <div class="col-2 text-center">
+                                                <button class="popover-btn" data-toggle="tooltip" data-placement="top"
+                                                    title="Insert Vertical Line"><i
+                                                        class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isPopoverVisible">
+            <div id="popover_url" class="popover_card url-social" 
+                *ngIf="isPopoverVisible_url">
+                <div class="row col-md-12" style="left: 0.5rem;">
+                    <div class="form-group d-flex align-items-center">
+                       @if(this.selectedElement?.hasAttribute("href")) {
+                            <label class="shadow-none "><a target="_blank">{{this.selectedElement?.getAttribute("href")}}</a></label>
+                            &nbsp;<i class="fas fa-trash" style="color: #dd0909;"></i>
+                        } @else {
+                            <input type="text" class="form-control shadow-none col-md-2" #social_url_link_input placeholder="profile link please">
+                            <i class="p-2 fas fa-paper-plane" (click)="updateSocialUrl(social_url_link_input.value)" style="color: #dd0909;" id="social_url_link" #social_url_link></i>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 6rem;">
             <div>
                 <!-- @if(!new_template_element) { -->
                 <div id="card1" #card1 class="business-card" [style.backgroundImage]="backgroundImage">
                     <div id="contactInfo">
                         <!-- Business card content goes here -->
-                        <img id="profileImg" src="https://picsum.photos/200/300" alt="Profile Image"
-                            class="draggable profile-img editable">
-                        <p class="draggable editable "> LTI mindtree and Qentelli </p>
-                        <p class="draggable editable">SaiMadhanMohan&#64;LtiMindtree.com</p>
+                        <img id="profileImg" #profileImg [ngStyle]="imageStyles" src="https://picsum.photos/200/300"
+                            alt="Profile Image" class="draggable profile-img-circle profile-img editable">
+                        <p class="draggable  editable "> LTI mindtree and Qentelli </p>
+                        <p class="draggable  editable">SaiMadhanMohan&#64;LtiMindtree.com</p>
                     </div>
                 </div>
                 <!-- } @else { -->
@@ -119,20 +303,37 @@
                 </div>
 
                 <div id="resizeMenu" #resizeMenu class="resize-menu context-menu">
-                    <input type="number" id="cardWidth" placeholder="Width">
-                    <input type="number" id="cardHeight" placeholder="Height">
-                    <button (click)="resizeCard()">Resize Card</button>
+                    <input type="number" class="form-control shadow-none" id="cardWidth" placeholder="Width">
+                    <input type="number" class="form-control shadow-none" id="cardHeight" placeholder="Height">
+                    <button (click)="resizeCard()" class="btn btn-sm btn-primary">Resize Card</button>
                 </div>
 
 
             </div>
 
-            <div id="qrCodeModal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <div id="qrCodeContainer"></div>
+
+            <div class="modal fade" id="qrCodeModal" #qrCodeModal tabindex="-1" aria-labelledby="qrCodeModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="qrCodeModalLabel">Business Card - QR Code</h5>
+                            <button type="button" class="btn btn-primary btn-md btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="qrCodeContainer" *ngIf="qrCodeUrl">
+                                <img [src]="qrCodeUrl">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-md btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+
             <div id="rightSidebar" #rightSidebar class="bg-light">
 
                 <div class="formSection" style="margin-bottom: 8rem;">
@@ -179,17 +380,20 @@
                                             <div class="font-shapes" style="width: fit-content;">
                                                 <div class="row">
                                                     <div class="col-2 text-center">
-                                                        <button class="popover-btn">
+                                                        <button class="popover-btn" id="addSquareImageButton"
+                                                            #addSquareImageButton>
                                                             <i style="font-size: 1.5rem;"
                                                                 class="fas fa-image"></i></button>
 
                                                     </div>
                                                     <div class="col-2 text-center">
-                                                        <button class="popover-btn"><img style="width: 1.5rem;"
+                                                        <button class="popover-btn" id="addCircleImageButton"
+                                                            #addCircleImageButton><img style="width: 1.5rem;"
                                                                 src="assets/icons/round.png"></button>
                                                     </div>
                                                     <div class="col-2 text-center">
-                                                        <button class="popover-btn"><img style="width: 1.5rem;"
+                                                        <button class="popover-btn" id="addTraingularImageButton"
+                                                            #addTraingularImageButton><img style="width: 1.5rem;"
                                                                 src="assets/icons/image.png"></button>
                                                     </div>
                                                 </div>
@@ -282,8 +486,8 @@
 
                                 </div>
                                 <div class="col-md-2">
-                                    <button class="btn btn-sm btn-info" id="generateQRCodeBtn" data-toggle="tooltip"
-                                        data-placement="top" title="Generate QR Code">
+                                    <button class="btn btn-sm btn-info" (click)="openModal()" id="generateQRCodeBtn"
+                                        data-toggle="tooltip" data-placement="top" title="Generate QR Code">
                                         <i class="fas fa-qrcode"></i>
                                     </button>
                                 </div>
@@ -310,24 +514,14 @@
 
 </div>
 
-<div id="popover" class="popover_card" style="border-radius: 2rem;" *ngIf="isPopoverVisible" [ngStyle]="popoverStyles"
-    class="context-menu">
+
+
+<div id="img_popover" class="context-menu popover_card" style="border-radius: 2rem;" *ngIf="isPopoverVisible_Img"
+    [ngStyle]="popoverStyles_Img">
     <div class="row d-flex justify-content-start align-items-center">
         <div class="col-md-12 d-flex align-items-center popover_layout">
-            <select (change)="changeFontFamily($event)" class="form-control shadow-none">
-                <option *ngFor="let font of fonts" [value]="font">{{font}}</option>
-            </select>
-
-            <input type="number" class="form-control shadow-none" id="fontSize" min="8" max="72" value="16"
-                style="width: 4rem;">
-            <button class="popover-btn"><i class="fas fa-clone"></i></button>
-            <button class="popover-btn" (click)="removeElement()"><i class="fas fa-trash"></i></button>
-            <button class="popover-btn" (click)="toggleItalic()"><i class="fas fa-italic"></i></button>
-            <button class="popover-btn" (click)="toggleBold()"><i class="fas fa-bold"></i></button>
-            <button class="popover-btn" (click)="toggleUnderline()"><i class="fas fa-underline"></i></button>
-         
-
-            <input type="color" class="form-control shadow-none" id="textColor">
+            <button class="popover-btn" (click)="flipImage()"><i class="fas fa-repeat"></i>&nbsp;Flip</button>
+            <button class="popover-btn"><i class="fas fa-crop"></i>&nbsp;Crop</button>
             <nav class="popover_setup" style="margin-left: 0.5rem;">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
@@ -336,10 +530,10 @@
                             <i class="fas fa-clone"></i>Layer
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
-                      padding-right: 1rem;
-                      padding-left: 1rem;
-                      overflow-y: scroll;
-                      height: 20rem;margin-left: -12rem;">
+          padding-right: 1rem;
+          padding-left: 1rem;
+          overflow-y: scroll;
+          height: 20rem;margin-left: -12rem;">
                             <div class="font-shapes" style="width: fit-content;">
                                 <label>Layer</label>
                                 <hr>
@@ -362,118 +556,8 @@
                     </li>
                 </ul>
             </nav>
-            <nav class="popover_setup">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <svg class="drag-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M5.55 3.051a2.694 2.694 0 0 0-2.351 4.012c.593 1.222 1.572 2.178 2.365 2.815a11.86 11.86 0 0 0 1.37.947 6 6 0 0 0 .092.053l.027.015.008.004.003.002h.002a.749.749 0 0 0 .71 0h.001l.003-.002.008-.004.026-.015a9.301 9.301 0 0 0 .408-.246c.264-.168.625-.414 1.023-.732.777-.622 1.738-1.553 2.34-2.743a2.694 2.694 0 0 0-4.166-3.35 2.684 2.684 0 0 0-1.87-.756ZM15.922 3.58a1.027 1.027 0 0 1 1.776 0l3.307 5.694a1.026 1.026 0 0 1-.888 1.542h-6.614a1.026 1.026 0 0 1-.887-1.542l3.306-5.694ZM16.81 20.949a4.213 4.213 0 1 0 0-8.425 4.213 4.213 0 0 0 0 8.425ZM3.568 13.654a.77.77 0 0 1 .77-.77h6.14a.77.77 0 0 1 .77.77v6.294c0 .34-.276.616-.616.616H4.338a.77.77 0 0 1-.77-.77v-6.14Z"
-                                    fill="currentColor"></path>
-                            </svg>Elements
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1" style="width: fit-content;
-                      padding-right: 1rem;
-                      padding-left: 1rem;
-                      overflow-y: scroll;
-                      height: 20rem;margin-left: -15rem;">
-                            <div class="font-shapes" style="width: fit-content;">
-                                <label>shapes</label>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-circle"></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-square "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-play "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-star "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-heart "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-dice-d6 "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-dice-d20 "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-gem "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-arrow-right "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-check "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-times "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-plus "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-minus "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-exclamation "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-question "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-circle-notch "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-square-full "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn far fa-circle "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn far fa-square "></i>
-                                    </div>
-                                    <div class="col-2 text-center ">
-                                        <i class="popover-btn fas fa-star-half-alt "></i>
-                                    </div>
-                                </div>
-                                <label>alignment</label>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-2 text-center">
-                                        <button class="popover-btn"><i class="fas fa-list-ul"></i></button>
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        <button class="popover-btn"><i class="fas fa-list-ol"></i></button>
-                                    </div>
-                                </div>
-                                <label>lines</label>
-                                <div class="row">
-                                    <div class="col-2 text-center">
-                                        <button class="popover-btn" data-toggle="tooltip" data-placement="top"
-                                            title="Insert Horizontal Line"><i class="fas fa-minus"></i></button>
-
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        <button class="popover-btn" data-toggle="tooltip" data-placement="top"
-                                            title="Insert Vertical Line"><i class="fas fa-ellipsis-v"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
-
-
 </div>
+
+<canvas #canvasElement style="display:none"></canvas>
