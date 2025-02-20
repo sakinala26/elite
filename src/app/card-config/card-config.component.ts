@@ -1,97 +1,120 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import interact from "interactjs";
 import html2canvas from "html2canvas";
 import QRCode from "qrcode";
 import { BusinessCardService } from './card_config.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-card-config',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './card-config.component.html',
   styleUrl: './card-config.component.scss'
 })
-export class CardConfigComponent implements OnInit,AfterViewInit {
+export class CardConfigComponent implements OnInit, AfterViewInit {
   @ViewChild("card1", { static: true }) businessCard!: ElementRef
   @ViewChild("contextMenu", { static: true }) contextMenu!: ElementRef
   @ViewChild("resizeMenu", { static: true }) resizeMenu!: ElementRef
-  
+
   @ViewChild('rightSidebar') rightSidebar!: ElementRef;
   @ViewChild('cardSection', { static: true }) cardSection!: ElementRef;
   new_template_element: boolean = true;
-  card_template_data: any[]= [
+  card_template_data: any[] = [
     {
-      id:"1", templatename:"Template One",img:"assets/img/img2.jpg",rating:0, important:false
+      id: "1", templatename: "Template One", img: "assets/img/img2.jpg", rating: 0, important: false
     },
     {
-      id:"2", templatename:"Template Two",img:"assets/img/img.webp",rating:0, important:false
+      id: "2", templatename: "Template Two", img: "assets/img/img.webp", rating: 0, important: false
     }
-  ]
+  ];
+  imagestore: string = "";
+  qrCodeUrl: string | null = null;
   currentElement: HTMLElement | null = null
   historyStack: string[] = []
   isImportant = false;
   rating = 0;
   selectedCardId: number | null = null;
-  backgroundImage: string= "";
+  backgroundImage: string = "";
   selectedElement: HTMLElement | null = null; // Track the selected element
+  selectedElement_Img: HTMLElement | null = null;
   rotationAngle: number = 0; // Track the rotation angle
-  isPopoverVisible = false;
-  popoverStyles = {};
+  isPopoverVisible = false; isPopoverVisible_url  = false;
+  isPopoverVisible_Img = false;
+  popoverStyles = {}; popoverStyles_Img = {};
   fonts = ['Arial', 'Courier New', 'Georgia', 'Times New Roman', 'Verdana'];
-  
+  imageStyles = { transform: 'scaleX(1)' };
+  ismodalpopup = false;
+  @ViewChild('profileImg') imageElement!: ElementRef<HTMLImageElement>;
+  @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('qrCodeModal', { static: true }) qrCodeModal!: ElementRef<HTMLElement>;
+
+
   highlightElement(element: HTMLElement | null) {
     element?.classList.add('highlight');
   }
-  
+
   removeHighlight(element: HTMLElement | null) {
     element?.classList.remove('highlight');
   }
-  
-  
-  
+
+
+
 
   selectElement(event: MouseEvent, element: HTMLElement): void {
+    debugger;
     // Example usage: Add these lines to the methods where you handle element clicks
-  this.highlightElement(this.selectedElement); // Add highlight to the selected element
-  setTimeout(() => this.removeHighlight(this.selectedElement), 2000); // Remove highlight after 2 seconds (or as desired)
-  
+    this.highlightElement(this.selectedElement); // Add highlight to the selected element
+    setTimeout(() => this.removeHighlight(this.selectedElement), 2000); // Remove highlight after 2 seconds (or as desired)
     // Deselect the previously selected element
     if (this.selectedElement) {
       this.selectedElement.classList.remove('highlight-border');
       this.isPopoverVisible = false;
     }
+    if (element.className.includes("social_valid")) {
+      this.isPopoverVisible_url = true;
+    } else {
+      this.isPopoverVisible_url = false;
+    }
     this.currentElement = event.target as HTMLElement
     // Update the selected element
     this.selectedElement = element;
     this.selectedElement.classList.add('highlight-border');
-  
+
     // Calculate the popover's position relative to the selected element
     const elementRect = this.selectedElement.getBoundingClientRect();
-    this.popoverStyles = {
-      top: `${elementRect.top + window.scrollY - parseFloat(getComputedStyle(document.documentElement).fontSize) * 6}px`, // 2rem gap
-      left: `${elementRect.left + window.scrollX*8}px`
-    };
+
     this.isPopoverVisible = true;
-  
+
     // Stop propagation to prevent triggering the document click event
     event.stopPropagation();
   }
-    
-  
-  
-  
+
+
+
+
   @HostListener('document:click', ['$event'])
-handleClick(event: MouseEvent) {
-  const popover = document.getElementById('popover');
-  if (this.selectedElement && !this.selectedElement.contains(event.target as Node) && (!popover || !popover.contains(event.target as Node))) {
+  handleClick(event: MouseEvent) {
+    const popover = document.getElementById('popover');
+    const popoverImg = document.getElementById('img_popover');
+    const popover_url = document.getElementById('popover_url');
+    if (this.selectedElement 
+      && !this.selectedElement.contains(event.target as Node) 
+      && (!popover || !popover.contains(event.target as Node)) 
+      && (!popover_url || !popover_url.contains(event.target as Node))) {
+    
     this.selectedElement.classList.remove('highlight-border');
     this.isPopoverVisible = false;
   }
-}
+    if (this.selectedElement_Img && !this.selectedElement_Img.contains(event.target as Node) && (!popoverImg || !popoverImg.contains(event.target as Node))) {
 
-  
+      this.isPopoverVisible_Img = false;
+    }
+  }
+
+
 
   changeFontFamily(event: any) {
     const selectedFont = event.target.value;
@@ -102,28 +125,21 @@ handleClick(event: MouseEvent) {
       console.warn('No element selected.');
     }
   }
-  
+
 
 
 
   setBackground(imageUrl: string): void {
     this.backgroundImage = `url("${imageUrl}")`;
   }
-   // Select an element and apply the highlight border
-  //  selectElement(element: HTMLElement): void {
-  //   if (this.selectedElement) {
-  //     this.selectedElement.classList.remove('highlight-border');
-  //   }
-  //   this.selectedElement = element;
-  //   this.selectedElement.classList.add('highlight-border');
-  // }
+
 
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
       if (!validImageTypes.includes(file.type)) {
-        alert('Invalid file type. Please upload an image file (JPEG, PNG, GIF).');
+        alert('Invalid file type. Please upload an image file (JPEG, PNG, GIF, JPG).');
         return;
       }
       const reader = new FileReader();
@@ -133,7 +149,7 @@ handleClick(event: MouseEvent) {
       reader.readAsDataURL(file);
     }
   }
-  
+
 
   onCardClick(cardId: number): void {
     this.selectedCardId = cardId;
@@ -153,38 +169,50 @@ handleClick(event: MouseEvent) {
   toggleImportant(): void {
     this.isImportant = !this.isImportant;
   }
+  openModal() {
+    this.initializeQRCodeButton();
+    setTimeout(() => {
+      const modalElement = this.qrCodeModal.nativeElement;
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }, 3000);
 
-  
+  }
+
   constructor(
     private renderer: Renderer2,
     private businessCardService: BusinessCardService,
-  ) {}
+    private cdRef: ChangeDetectorRef
+  ) { }
   ngAfterViewInit() {
-    
     this.addCardEventListeners();
   }
   ngOnInit() {
-    
+
     this.initializeInteractJS();
     this.initializeContextMenu();
     this.initializeResizeMenu();
     this.initializeThemeSelector();
     this.initializeCustomTheme();
     this.initializeAddTextButton();
+    this.initializeAddCircleImageButton();
+    this.initializeAddSquareImageButton();
+    this.initializeAddTriangularImageButton();
     this.initializeSocialButtons();
     this.initializeDownloadButton();
-    this.initializeQRCodeButton();
+    // this.initializeQRCodeButton();
     this.initializeResetButton();
     this.initializeAddLineButtons();
     this.initializeProfileImageUpload();
     this.makeALLElementsEditable();
-      // Register elements with the layer service
-  setTimeout(() => {
-    document.querySelectorAll('.draggable').forEach((el) => {
-      this.businessCardService.registerElement(el as HTMLElement);
-    });
-  }, 1000);
+    // Register elements with the layer service
+    setTimeout(() => {
+      document.querySelectorAll('.draggable').forEach((el) => {
+        this.businessCardService.registerElement(el as HTMLElement);
+      });
+    }, 1000);
   }
+
 
 
   addCardEventListeners(): void {
@@ -201,8 +229,8 @@ handleClick(event: MouseEvent) {
     });
   }
 
-   // Add event listener to rotation icon
-   addRotationIconListener(): void {
+  // Add event listener to rotation icon
+  addRotationIconListener(): void {
     const rotationIcon = this.selectedElement?.querySelector('.rotation-icon') as HTMLElement;
     if (rotationIcon) {
       rotationIcon.addEventListener('click', () => {
@@ -221,7 +249,7 @@ handleClick(event: MouseEvent) {
       this.renderer.setStyle(this.selectedElement, 'transform', `translate(${x}px, ${y}px) rotate(${angle}deg)`);
     }
   }
-  
+
 
   initializeInteractJS() {
     interact("#popover").draggable({
@@ -236,20 +264,44 @@ handleClick(event: MouseEvent) {
           this.renderer.setAttribute(target, "data-y", y.toString())
         }
       },
+    });
+
+    interact("#img_popover").draggable({
+      inertia: true,
+      listeners: {
+        move: (event) => {
+          const target = event.target as HTMLElement
+          const x = (Number.parseFloat(target.getAttribute("data-x") || "0") || 0) + event.dx
+          const y = (Number.parseFloat(target.getAttribute("data-y") || "0") || 0) + event.dy
+          this.renderer.setStyle(target, "transform", `translate(${x}px, ${y}px)`)
+          this.renderer.setAttribute(target, "data-x", x.toString())
+          this.renderer.setAttribute(target, "data-y", y.toString())
+        }
+      },
     })
+
+
 
     interact(".draggable").draggable({
       inertia: true,
+      modifiers: [
+        interact.modifiers.restrict({
+          restriction: '#card1', // Restrict to card1
+          endOnly: true,
+          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+        })
+      ],
+      autoScroll: true,
       listeners: {
         start: (event) => {
           const target = event.target as HTMLElement;
-          if (target.id != "profileImg") {
-          if (this.selectedElement) {
-            this.renderer.removeClass(this.selectedElement, 'highlight-border');
+          if (!target.className.includes("profile-img")) {
+            if (this.selectedElement) {
+              this.renderer.removeClass(this.selectedElement, 'highlight-border');
+            }
+            this.selectedElement = target;
+            this.renderer.addClass(this.selectedElement, 'highlight-border');
           }
-          this.selectedElement = target;
-          this.renderer.addClass(this.selectedElement, 'highlight-border');
-        }
         },
         move: (event) => {
           const target = event.target as HTMLElement
@@ -260,30 +312,69 @@ handleClick(event: MouseEvent) {
           this.renderer.setAttribute(target, "data-y", y.toString())
         },
 
-        end: ()=> {
+        end: () => {
           if (this.selectedElement) {
             this.renderer.removeClass(this.selectedElement, 'highlight-border');
           }
         }
       },
-    });
+    })
+    // .resizable({
+    //   edges: { left: true, right: true, bottom: true, top: true },
+    //   listeners: {
+    //     move: (event: any) => {
+    //       const target = event.target as HTMLElement;
+    //       let x = (parseFloat(target.getAttribute('data-x') || '0')) || 0;
+    //       let y = (parseFloat(target.getAttribute('data-y') || '0')) || 0;
+
+    //       target.style.width = `${event.rect.width}px`;
+    //       target.style.height = `${event.rect.height}px`;
+
+    //       x += event.deltaRect.left;
+    //       y += event.deltaRect.top;
+
+    //       target.style.transform = `translate(${x}px, ${y}px)`;
+    //       target.setAttribute('data-x', x.toString());
+    //       target.setAttribute('data-y', y.toString());
+    //     }
+    //   },
+    //   inertia: true,
+    //   modifiers: [
+    //     interact.modifiers.restrictEdges({
+    //       outer: 'parent'
+    //     }),
+    //     interact.modifiers.restrictSize({
+    //       min: { width: 50, height: 20 }
+    //     })
+    //   ]
+    // });
 
 
 
-    
-    
 
 
-     // Add click listener for selection
-     interact('.draggable').on('tap', (event) => {
+
+
+    // Add click listener for selection
+    interact('.draggable').on('tap', (event) => {
       const target = event.currentTarget as HTMLElement;
-      if (target.id != 'profileImg') {
+      if (!target.className.includes("profile-img")) {
         this.selectElement(event, target);
+      } else {
+        const elementRect = target.getBoundingClientRect();
+        this.selectedElement_Img = target;
+        this.popoverStyles_Img = {
+          top: `${elementRect.top + window.scrollY - parseFloat(getComputedStyle(document.documentElement).fontSize) * 1}px`,
+          left: `${elementRect.left + window.scrollX}px`
+        };
+        this.isPopoverVisible_Img = true;
+        this.cdRef.detectChanges(); // Trigger change detection
       }
+      event.stopPropagation();
     });
-    
-   
-    
+
+
+
 
     interact("#card1").resizable({
       edges: { left: true, right: true, bottom: true, top: true },
@@ -444,7 +535,7 @@ handleClick(event: MouseEvent) {
 
   initializeAddTextButton() {
     this.renderer.listen(document.getElementById("addTextButton"), "click", (event) => {
-event.preventDefault();
+      event.preventDefault();
       const inputText = (document.getElementById("inputText") as HTMLInputElement).value
       if (inputText) {
         const newTextElement = this.renderer.createElement("p")
@@ -456,6 +547,53 @@ event.preventDefault();
         this.initializeInteractJS()
         this.trackChanges()
       }
+    })
+  }
+
+  initializeAddSquareImageButton() {
+    this.renderer.listen(document.getElementById("addSquareImageButton"), "click", (event) => {
+      event.preventDefault();
+      const newImageElement = this.renderer.createElement("img")
+      this.renderer.addClass(newImageElement, "draggable");
+      this.renderer.addClass(newImageElement, "profile-img");
+      this.renderer.addClass(newImageElement, "profile-img-square");
+      this.renderer.addClass(newImageElement, "editable");
+      this.renderer.setStyle(newImageElement, 'width', '100px'); // Size of the square
+      this.renderer.setStyle(newImageElement, 'height', '100px'); // Size of the square
+      this.renderer.setAttribute(newImageElement, 'src', 'https://picsum.photos/200/300');
+      this.renderer.appendChild(document.getElementById('contactInfo'), newImageElement);
+      this.trackChanges();
+    })
+  }
+  initializeAddTriangularImageButton() {
+    this.renderer.listen(document.getElementById("addTraingularImageButton"), "click", (event) => {
+      event.preventDefault();
+      const newImageElement = this.renderer.createElement("img")
+      this.renderer.addClass(newImageElement, "draggable");
+      this.renderer.addClass(newImageElement, "profile-img");
+      this.renderer.addClass(newImageElement, "profile-img-traingular")
+      this.renderer.addClass(newImageElement, "editable");
+      this.renderer.setStyle(newImageElement, 'width', '100px'); // Size of the square
+      this.renderer.setStyle(newImageElement, 'height', '100px'); // Size of the square
+      this.renderer.setAttribute(newImageElement, 'src', 'https://picsum.photos/200/300');
+      this.renderer.appendChild(document.getElementById('contactInfo'), newImageElement);
+      this.trackChanges();
+    });
+  }
+
+  
+
+  initializeAddCircleImageButton() {
+    this.renderer.listen(document.getElementById("addCircleImageButton"), "click", (event) => {
+      event.preventDefault();
+      const newImageElement = this.renderer.createElement("img")
+      this.renderer.addClass(newImageElement, "draggable");
+      this.renderer.addClass(newImageElement, "profile-img");
+      this.renderer.addClass(newImageElement, "profile-img-circle")
+      this.renderer.addClass(newImageElement, "editable");
+      this.renderer.setAttribute(newImageElement, 'src', 'https://picsum.photos/200/300');
+      this.renderer.appendChild(document.getElementById('contactInfo'), newImageElement);
+      this.trackChanges();
     })
   }
 
@@ -474,11 +612,17 @@ event.preventDefault();
       })
     })
   }
+  updateSocialUrl(val: string) {
+    if (this.selectedElement)
+    this.selectedElement.setAttribute("href",val);
+  }
 
   addSocialIcon(iconClass: string, iconName: string) {
-    const newIconElement = this.renderer.createElement("p")
+    const newIconElement = this.renderer.createElement("a")
     this.renderer.addClass(newIconElement, "draggable")
     this.renderer.addClass(newIconElement, "editable")
+    this.renderer.setStyle(newIconElement,"target","_blank")
+    this.renderer.addClass(newIconElement, "social_valid")
     this.renderer.setProperty(newIconElement, "innerHTML", `<i class="${iconClass}"></i> ${iconName}`)
     this.renderer.appendChild(document.getElementById("contactInfo"), newIconElement)
     this.makeEditable(newIconElement)
@@ -489,7 +633,7 @@ event.preventDefault();
   makeEditable(element: HTMLElement) {
     this.renderer.listen(element, "dblclick", () => {
       const existingInput = element.querySelector('input');
-  
+
       // Check if input already exists to prevent re-creating it
       if (existingInput) {
         return;
@@ -516,9 +660,9 @@ event.preventDefault();
     })
   }
 
-  makeALLElementsEditable(){
+  makeALLElementsEditable() {
     const editableElements = this.businessCard.nativeElement.querySelectorAll(".editable");
-    editableElements.forEach((element:HTMLElement) => {
+    editableElements.forEach((element: HTMLElement) => {
       this.makeEditable(element);
     })
   }
@@ -526,7 +670,9 @@ event.preventDefault();
   initializeDownloadButton() {
     this.renderer.listen(document.getElementById("downloadBtn"), "click", () => {
       html2canvas(this.businessCard.nativeElement).then((canvas) => {
-        const link = this.renderer.createElement("a")
+        const link = this.renderer.createElement("a");
+        let image_uploaded = "https://picsum.photos/200/300";
+        this.imagestore = canvas.toDataURL("image/png");
         this.renderer.setAttribute(link, "href", canvas.toDataURL("image/png"))
         this.renderer.setAttribute(link, "download", "business_card.png")
         link.click()
@@ -534,50 +680,38 @@ event.preventDefault();
     })
   }
 
+  saveImage(dataUrl: string, filename: string): void {
+    const blob = this.dataURLtoBlob(dataUrl);
+    saveAs(blob, filename);
+  }
+
+  dataURLtoBlob(dataUrl: string): Blob {
+    const byteString = atob(dataUrl.split(',')[1]);
+    const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([uint8Array], { type: mimeString });
+  }
+
   initializeQRCodeButton() {
-    this.renderer.listen(document.getElementById("generateQRCodeBtn"), "click", () => {
-      html2canvas(this.businessCard.nativeElement)
-        .then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          this.businessCardService
-            .uploadImage(imgData)
-            .then((url: any) => {
-              let qrCodeContainer = document.getElementById("qrCodeContainer") as HTMLCanvasElement;
-              
-              // Clear the previous QR code if it exists
-              if (qrCodeContainer) {
-                qrCodeContainer.innerHTML = "";
-              } else {
-                // If qrCodeContainer doesn't exist, create it
-                qrCodeContainer = document.createElement("canvas");
-                qrCodeContainer.id = "qrCodeContainer";
-                document.body.appendChild(qrCodeContainer);
-              }
-    
-              // Ensure the qrCodeContainer is a canvas element
-              if (qrCodeContainer instanceof HTMLCanvasElement) {
-                QRCode.toCanvas(qrCodeContainer, url, { width: 128 }, (error: any) => {
-                  if (error) {
-                    console.error(error);
-                  } else {
-                    console.log("QR Code generated successfully");
-                  }
-                });
-              } else {
-                console.error("qrCodeContainer is not a canvas element.");
-              }
-    
-              // Show QR code modal (You'll need to implement this part using Angular's modal system or a third-party library)
-            })
-            .catch((error: any) => {
-              console.error("Error uploading image:", error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error generating image:", error);
-        });
-    });
-    
+    html2canvas(this.businessCard.nativeElement).then((canvas) => {
+      const imagestore = canvas.toDataURL("image/png");
+      this.saveImage(imagestore, "business_card.png");
+
+      // Generate QR code from the saved image URL
+      const imageUrl = 'assets/business_card.png'; // Replace with the actual path where you save the image
+      QRCode.toDataURL(imageUrl, (err, url) => {
+        if (err) {
+          console.error(err);
+        } else {
+          this.qrCodeUrl = url;
+        }
+      })
+    })
+
   }
 
   initializeResetButton() {
@@ -631,7 +765,8 @@ event.preventDefault();
           if (file) {
             const reader = new FileReader()
             reader.onload = (e: ProgressEvent<FileReader>) => {
-              this.renderer.setAttribute(profileImg, "src", e.target?.result as string)
+              this.renderer.setAttribute(profileImg, "src", e.target?.result as string);
+
             }
             reader.readAsDataURL(file)
           }
@@ -661,6 +796,32 @@ event.preventDefault();
 
   new_template() {
     this.new_template_element = true;
+  }
+
+
+  flipImage() {
+    const currentScale = this.imageStyles.transform === 'scaleX(1)' ? -1 : 1;
+    this.imageStyles = { transform: `scaleX(${currentScale})` };
+  }
+
+  cropImage() {
+    const canvas = this.canvasElement.nativeElement;
+    const context = canvas.getContext('2d');
+    const img = this.imageElement.nativeElement;
+
+    const cropWidth = 100; // Adjust as needed
+    const cropHeight = 100; // Adjust as needed
+
+    canvas.width = cropWidth;
+    canvas.height = cropHeight;
+
+    if (context) {
+      context.drawImage(img, 0, 0, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+      const croppedImageURL = canvas.toDataURL('image/png');
+
+      // Display the cropped image (optional)
+      img.src = croppedImageURL;
+    }
   }
 
 }
